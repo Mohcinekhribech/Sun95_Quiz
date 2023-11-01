@@ -16,7 +16,6 @@ public class Level {
     private int id;
     private int maxPoint;
     private int minPoint;
-    @JsonIgnore
     @OneToMany(mappedBy = "level")
     private List<Question> questions;
 }
