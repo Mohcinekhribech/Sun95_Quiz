@@ -1,9 +1,13 @@
 package com.youcode.sunquizz.Question;
 
+import com.youcode.sunquizz.Answer.Answer;
+import com.youcode.sunquizz.Answer.AnswerService;
 import com.youcode.sunquizz.Level.Level;
 import com.youcode.sunquizz.Question.Question;
 import com.youcode.sunquizz.Question.QuestionService;
+import com.youcode.sunquizz.Validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +18,27 @@ import java.util.List;
 public class QuestionController {
     @Autowired
     QuestionService questionService;
+//    @Autowired
+//    private AnswerService answerService;
+
+//    @PostMapping("/{questionId}/answers/{answerId}")
+//    public ResponseEntity<String> associateAnswerWithQuestion(
+//            @PathVariable Integer questionId, @PathVariable Integer answerId,
+//            @RequestBody Validation validation) {
+//        Question question = questionService.getQuestion(questionId);
+//        Answer answer = answerService.getAnswer(answerId);
+//
+//        if (question != null && answer != null) {
+//            answer.setValidation(validation);
+//            question.getAnswers().add(answer);
+//            answer.getQuestions().add(question);
+//            questionService.createQuestion(question);
+//
+//            return ResponseEntity.ok("Answer associated with Question successfully.");
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
     @PostMapping
     public Question createQuestion(@RequestBody Question question)
     {
