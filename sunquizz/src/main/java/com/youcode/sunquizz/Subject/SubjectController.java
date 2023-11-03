@@ -25,11 +25,18 @@ public class SubjectController {
     {
         return subjectService.getSubjects();
     }
+    @GetMapping("/subSubject/{id}")
+    public List<Subject> getSubSubjects(@PathVariable Integer id)
+    {
+        Subject parentSubject = subjectService.getSubject(id);
+        return subjectService.getSubSubject(parentSubject);
+    }
     @GetMapping("/search/{title}")
     public Subject getSubject(@PathVariable String title)
     {
-        return subjectService.getSubject(title);
+        return subjectService.getSubjectByTitle(title);
     }
+
     @DeleteMapping("delete/{id}")
     public Integer deleteSubject(@PathVariable Integer id)
     {
