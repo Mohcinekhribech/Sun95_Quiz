@@ -1,6 +1,7 @@
 package com.youcode.sunquizz.AssignQuizz;
 
 import com.youcode.sunquizz.Quizz.Quizz;
+import com.youcode.sunquizz.StudentAnswer.StudentAnswer;
 import com.youcode.sunquizz.User.Student.Student;
 import com.youcode.sunquizz.User.Teacher.Teacher;
 import jakarta.annotation.Nullable;
@@ -8,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -27,4 +29,6 @@ public class AssignQuizz {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
+    @OneToMany(mappedBy = "assignQuizz", fetch = FetchType.LAZY)
+    private List<StudentAnswer> studentAnswers;
 }
