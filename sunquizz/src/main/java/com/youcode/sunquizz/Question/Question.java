@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonMerge;
 import com.youcode.sunquizz.Answer.Answer;
 import com.youcode.sunquizz.Level.Level;
 import com.youcode.sunquizz.Question.Enums.QuestionType;
+import com.youcode.sunquizz.QuizzQuestion.QuizzQuestion;
 import com.youcode.sunquizz.Subject.Subject;
 import com.youcode.sunquizz.Validation.Validation;
 import jakarta.persistence.*;
@@ -30,4 +31,7 @@ public class Question {
     private Level level;
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
     private List<Validation> validations;
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+    private List<QuizzQuestion> quizzQuestions;
+
 }
