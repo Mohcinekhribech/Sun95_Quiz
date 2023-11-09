@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonMerge;
 import com.youcode.sunquizz.Answer.Answer;
 import com.youcode.sunquizz.Level.Level;
+import com.youcode.sunquizz.Media.Media;
 import com.youcode.sunquizz.Question.Enums.QuestionType;
 import com.youcode.sunquizz.QuizzQuestion.QuizzQuestion;
 import com.youcode.sunquizz.Subject.Subject;
@@ -33,5 +34,8 @@ public class Question {
     private List<Validation> validations;
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
     private List<QuizzQuestion> quizzQuestions;
+    @ManyToOne
+    @JoinColumn(name = "media_id",referencedColumnName = "id")
+    private Media media;
 
 }
