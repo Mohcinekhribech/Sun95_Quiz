@@ -14,7 +14,7 @@ public class AssignQuizzController {
     @PostMapping
     public ResponseEntity<List<AssignQuizz>> createAssignQuizz(@RequestBody List<AssignQuizz> assignQuizzes)
     {
-        List<AssignQuizz> assignQuizzes1 = assignQuizzService.createAssignQuizz(assignQuizzes)
+        List<AssignQuizz> assignQuizzes1 = assignQuizzService.createAssignQuizz(assignQuizzes);
         if(!assignQuizzes1.isEmpty())
         {
             return ResponseEntity.ok().body(assignQuizzes1);

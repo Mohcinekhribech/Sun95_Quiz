@@ -18,60 +18,54 @@ import java.util.List;
 public class QuestionController {
     @Autowired
     QuestionService questionService;
-//    @Autowired
-//    private AnswerService answerService;
-
-//    @PostMapping("/{questionId}/answers/{answerId}")
-//    public ResponseEntity<String> associateAnswerWithQuestion(
-//            @PathVariable Integer questionId, @PathVariable Integer answerId,
-//            @RequestBody Validation validation) {
-//        Question question = questionService.getQuestion(questionId);
-//        Answer answer = answerService.getAnswer(answerId);
-//
-//        if (question != null && answer != null) {
-//            answer.setValidation(validation);
-//            question.getAnswers().add(answer);
-//            answer.getQuestions().add(question);
-//            questionService.createQuestion(question);
-//
-//            return ResponseEntity.ok("Answer associated with Question successfully.");
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
     @PostMapping
-    public Question createQuestion(@RequestBody Question question)
+    public ResponseEntity<Question> createQuestion(@RequestBody Question question)
     {
-        return questionService.createQuestion(question);
+        Question question1 = questionService.createQuestion(question);
+        if(question1 != null)
+        {
+            return  ResponseEntity.ok().body(question1);
+        }
+        return ResponseEntity.badRequest().body(null);
     }
     @PutMapping("/{id}")
-    public Question updateQuestion(@PathVariable Integer id, @RequestBody Question question)
+    public ResponseEntity<Question> updateQuestion(@PathVariable Integer id, @RequestBody Question question)
     {
-        return questionService.updateQuestion(question,id);
+        Question question1 = questionService.updateQuestion(question,id);;
+        if(question1 != null)
+        {
+            return  ResponseEntity.ok().body(question1);
+        }
+        return ResponseEntity.badRequest().body(null);
     }
     @GetMapping
-    public List<Question> getQuestions(@RequestBody Question question)
+    public ResponseEntity<List<Question>> getQuestions(@RequestBody Question question)
     {
-        return questionService.getQuestions();
+        return ResponseEntity.ok().body(questionService.getQuestions());
     }
     @GetMapping("/{id}")
-    public Question getQuestion(@PathVariable Integer id)
+    public ResponseEntity<Question> getQuestion(@PathVariable Integer id)
     {
-        return questionService.getQuestion(id);
+        return ResponseEntity.ok().body(questionService.getQuestion(id));
     }
     @DeleteMapping("delete/{id}")
-    public Integer deleteQuestion(@PathVariable Integer id)
+    public ResponseEntity<String> deleteQuestion(@PathVariable Integer id)
     {
-        return questionService.deleteQuestion(id);
+        Integer deleted = questionService.deleteQuestion(id);
+        if(deleted == 1)
+        {
+            return ResponseEntity.ok().body("question deleted");
+        }
+        return ResponseEntity.ok().body("question not deleted");
     }
     @GetMapping("by_level/{id}")
-    public List<Question> getQuestionByLevel(@PathVariable Integer id)
+    public ResponseEntity<List<Question>> getQuestionByLevel(@PathVariable Integer id)
     {
-        return questionService.getQuestionByLevel(id);
+        return ResponseEntity.ok().body(questionService.getQuestionByLevel(id));
     }
     @GetMapping("by_subject/{id}")
-    public List<Question> getQuestionBySubject(@PathVariable Integer id)
+    public ResponseEntity<List<Question>> getQuestionBySubject(@PathVariable Integer id)
     {
-        return questionService.getQuestionBySubject(id);
+        return ResponseEntity.ok().body(questionService.getQuestionBySubject(id));
     }
 }

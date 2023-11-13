@@ -1,8 +1,10 @@
 package com.youcode.sunquizz.Media;
 
+import com.youcode.sunquizz.Level.Level;
 import com.youcode.sunquizz.Media.Media;
 import com.youcode.sunquizz.Media.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,33 +15,48 @@ public class MediaController {
     @Autowired
     MediaService mediaService;
     @PostMapping
-    public Media createMedia(@RequestBody Media media)
+    public ResponseEntity<Media> createMedia(@RequestBody Media media)
     {
-        return mediaService.createMedia(media);
+        Media media1 = mediaService.createMedia(media);
+        if(media1 != null)
+        {
+            return ResponseEntity.ok().body(media1);
+        }
+        return ResponseEntity.badRequest().body(null);
     }
     @PutMapping("/{id}")
-    public Media updateMedia(@PathVariable Integer id, @RequestBody Media media)
+    public ResponseEntity<Media> updateMedia(@PathVariable Integer id, @RequestBody Media media)
     {
-        return mediaService.updateMedia(media,id);
+        Media media1 = mediaService.updateMedia(media,id);
+        if(media1 != null)
+        {
+            return ResponseEntity.ok().body(media1);
+        }
+        return ResponseEntity.badRequest().body(null);
     }
     @GetMapping
-    public List<Media> getMedias(@RequestBody Media media)
+    public ResponseEntity<List<Media>> getMedias(@RequestBody Media media)
     {
-        return mediaService.getMedias();
+        return ResponseEntity.ok().body(mediaService.getMedias());
     }
     @GetMapping("/type/{mediaType}")
-    public List<Media> getMediasByType(@PathVariable MediaType mediaType)
+    public ResponseEntity<List<Media>> getMediasByType(@PathVariable MediaType mediaType)
     {
-        return mediaService.getMediaByType(mediaType);
+        return ResponseEntity.ok().body(mediaService.getMediaByType(mediaType));
     }
     @GetMapping("/{id}")
-    public Media getMedia(@PathVariable Integer id)
+    public ResponseEntity<Media> getMedia(@PathVariable Integer id)
     {
-        return mediaService.getMedia(id);
+        return ResponseEntity.ok().body(mediaService.getMedia(id));
     }
     @DeleteMapping("delete/{id}")
-    public Integer deleteMedia(@PathVariable Integer id)
+    public ResponseEntity<String> deleteMedia(@PathVariable Integer id)
     {
-        return mediaService.deleteMedia(id);
+        Integer deleted = mediaService.deleteMedia(id);
+        if(deleted == 1)
+        {
+            return  ResponseEntity.ok().body("media deleted");
+        }
+        return ResponseEntity.badRequest().body("media not deleted");
     }
 }

@@ -3,6 +3,7 @@ package com.youcode.sunquizz.Level;
 import com.youcode.sunquizz.Level.Level;
 import com.youcode.sunquizz.Level.LevelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,28 +14,43 @@ public class LevelController {
     @Autowired
     LevelService levelService;
     @PostMapping
-    public Level createLevel(@RequestBody Level level)
+    public ResponseEntity<Level> createLevel(@RequestBody Level level)
     {
-        return levelService.createLevel(level);
+        Level level1 = levelService.createLevel(level);
+        if(level1 != null)
+        {
+              return ResponseEntity.ok().body(level1);
+        }
+        return ResponseEntity.badRequest().body(null);
     }
     @PutMapping("/{id}")
-    public Level updateLevel(@PathVariable Integer id, @RequestBody Level level)
+    public ResponseEntity<Level> updateLevel(@PathVariable Integer id, @RequestBody Level level)
     {
-        return levelService.updateLevel(level,id);
+        Level level1 = levelService.updateLevel(level,id);
+        if(level1 != null)
+        {
+            return ResponseEntity.ok().body(level1);
+        }
+        return ResponseEntity.badRequest().body(null);
     }
     @GetMapping
-    public List<Level> getLevels(@RequestBody Level level)
+    public ResponseEntity<List<Level>> getLevels(@RequestBody Level level)
     {
-        return levelService.getLevels();
+        return ResponseEntity.ok().body(levelService.getLevels());
     }
     @GetMapping("/{id}")
-    public Level getLevel(@PathVariable Integer id)
+    public ResponseEntity<Level> getLevel(@PathVariable Integer id)
     {
-        return levelService.getLevel(id);
+        return ResponseEntity.ok().body(levelService.getLevel(id));
     }
     @DeleteMapping("delete/{id}")
-    public Integer deleteLevel(@PathVariable Integer id)
+    public ResponseEntity<String> deleteLevel(@PathVariable Integer id)
     {
-        return levelService.deleteLevel(id);
+        Integer deleted = levelService.deleteLevel(id);
+        if(deleted == 1)
+        {
+            return ResponseEntity.ok().body("level deleted");
+        }
+        return ResponseEntity.badRequest().body("level not deleted");
     }
 }
