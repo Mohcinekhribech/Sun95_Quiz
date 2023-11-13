@@ -42,6 +42,6 @@ public class StudentService {
     }
     public List<Student> searchByName(String name)
     {
-        return studentRepository.findAllByFirstNameOrLastName(name,name);
+        return studentRepository.findAllByFirstName(name);
     }
 }
