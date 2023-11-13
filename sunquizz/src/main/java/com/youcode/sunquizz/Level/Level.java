@@ -1,11 +1,14 @@
 package com.youcode.sunquizz.Level;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonMerge;
 import com.youcode.sunquizz.Question.Question;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -16,7 +19,6 @@ public class Level {
     private int id;
     private int maxPoint;
     private int minPoint;
-    @JsonIgnore
     @OneToMany(mappedBy = "level")
-    private List<Question> questions;
+    private Set<Question> questions = new HashSet<>();
 }
