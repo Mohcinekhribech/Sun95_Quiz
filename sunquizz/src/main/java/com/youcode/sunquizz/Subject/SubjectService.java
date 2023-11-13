@@ -14,13 +14,21 @@ public class SubjectService {
     {
         this.subjectRepository = subjectRepository;
     }
-    public Subject getSubject(String name)
+    public Subject getSubjectByTitle(String title)
     {
-        return subjectRepository.findByTitle(name).get();
+        return subjectRepository.findByTitle(title).get();
+    }
+    public Subject getSubject(Integer id)
+    {
+        return subjectRepository.findById(id).get();
     }
     public List<Subject> getSubjects()
     {
         return subjectRepository.findAll();
+    }
+    public List<Subject> getSubSubject(Subject parentSubject)
+    {
+        return subjectRepository.findAllByParentSubject(parentSubject);
     }
     public Subject createSubject(Subject subject)
     {
