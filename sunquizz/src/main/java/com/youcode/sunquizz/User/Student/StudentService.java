@@ -11,37 +11,37 @@ import java.util.Optional;
 @Service
 public class StudentService {
     @Autowired
-    StudentRepository teacherRepository;
+    StudentRepository studentRepository;
 
-    public Student createStudent(Student teacher)
+    public Student createStudent(Student student)
     {
-        return teacherRepository.save(teacher);
+        return studentRepository.save(student);
     }
     public Integer deleteStudent(Integer id)
     {
-        Optional<Student> teacherOptional = teacherRepository.findById(id);
-        if(teacherOptional.isPresent())
+        Optional<Student> studentOptional = studentRepository.findById(id);
+        if(studentOptional.isPresent())
         {
-            teacherRepository.delete(teacherOptional.get());
+            studentRepository.delete(studentOptional.get());
             return 1;
         }
         return 0;
     }
-    public Student updateStudent(Integer id,Student teacher)
+    public Student updateStudent(Integer id,Student student)
     {
-        if(teacherRepository.findById(id).isPresent())
+        if(studentRepository.findById(id).isPresent())
         {
-            teacher.setId(id);
-            return teacherRepository.save(teacher);
+            student.setId(id);
+            return studentRepository.save(student);
         }
         return null;
     }
     public List<Student> getAll()
     {
-        return teacherRepository.findAll();
+        return studentRepository.findAll();
     }
     public List<Student> searchByName(String name)
     {
-        return teacherRepository.findAllByFirstNameOrLastName(name,name);
+        return studentRepository.findAllByFirstNameOrLastName(name,name);
     }
 }
