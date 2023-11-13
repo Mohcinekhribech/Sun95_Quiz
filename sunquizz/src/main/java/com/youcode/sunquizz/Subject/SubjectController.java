@@ -35,12 +35,19 @@ public class SubjectController {
         List<Subject> subject = subjectService.getSubjects();
         return ResponseEntity.ok().body(subject);
     }
+    @GetMapping("/subSubject/{id}")
+    public List<Subject> getSubSubjects(@PathVariable Integer id)
+    {
+        Subject parentSubject = subjectService.getSubject(id);
+        return subjectService.getSubSubject(parentSubject);
+    }
     @GetMapping("/search/{title}")
     public ResponseEntity<Subject> getSubject(@PathVariable String title)
     {
         Subject subject = subjectService.getSubject(title);
         return ResponseEntity.ok().body(subject);
     }
+
     @DeleteMapping("delete/{id}")
     public ResponseEntity<String> deleteSubject(@PathVariable Integer id)
     {
