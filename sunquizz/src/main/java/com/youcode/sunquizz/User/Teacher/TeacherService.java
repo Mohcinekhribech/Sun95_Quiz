@@ -40,6 +40,6 @@ public class TeacherService {
     }
     public List<Teacher> searchByName(String name)
     {
-        return teacherRepository.findAllByFirstNameOrLastName(name,name);
+        return teacherRepository.findAllByFirstName(name);
     }
 }
