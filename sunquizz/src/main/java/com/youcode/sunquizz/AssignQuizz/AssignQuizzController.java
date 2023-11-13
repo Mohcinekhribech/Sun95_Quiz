@@ -1,6 +1,7 @@
 package com.youcode.sunquizz.AssignQuizz;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,33 +12,51 @@ public class AssignQuizzController {
     @Autowired
     AssignQuizzService assignQuizzService;
     @PostMapping
-    public List<AssignQuizz> createAssignQuizz(@RequestBody List<AssignQuizz> assignQuizzes)
+    public ResponseEntity<List<AssignQuizz>> createAssignQuizz(@RequestBody List<AssignQuizz> assignQuizzes)
     {
-        return assignQuizzService.createAssignQuizz(assignQuizzes);
+        List<AssignQuizz> assignQuizzes1 = assignQuizzService.createAssignQuizz(assignQuizzes)
+        if(!assignQuizzes1.isEmpty())
+        {
+            return ResponseEntity.ok().body(assignQuizzes1);
+        }
+        return  ResponseEntity.badRequest().body(null);
     }
     @PutMapping("/{id}")
-    public AssignQuizz updateAssignQuizz(@PathVariable Integer id, @RequestBody AssignQuizz assignQuizz)
+    public ResponseEntity<AssignQuizz> updateAssignQuizz(@PathVariable Integer id, @RequestBody AssignQuizz assignQuizz)
     {
-        return assignQuizzService.updateAssignQuizz(id,assignQuizz);
+        AssignQuizz assignQuizz1 = assignQuizzService.updateAssignQuizz(id,assignQuizz);
+        if(assignQuizz1!=null)
+        {
+        return ResponseEntity.ok().body(assignQuizz1);
+        }
+        return ResponseEntity.badRequest().body(null);
     }
     @GetMapping
-    public List<AssignQuizz> getAssignQuizzs()
+    public ResponseEntity<List<AssignQuizz>> getAssignQuizzs()
     {
-        return assignQuizzService.getAll();
+        List<AssignQuizz> assignQuizzes =  assignQuizzService.getAll();
+        return ResponseEntity.ok().body(assignQuizzes);
     }
     @GetMapping("/student/{id}")
-    public List<AssignQuizz> getAllTestsAssignToOneStudent(@PathVariable Integer id)
+    public ResponseEntity<List<AssignQuizz>> getAllTestsAssignToOneStudent(@PathVariable Integer id)
     {
-        return assignQuizzService.getAllByStudent(id);
+        List<AssignQuizz> assignQuizzes =  assignQuizzService.getAllByStudent(id);
+        return ResponseEntity.ok().body(assignQuizzes);
     }
     @GetMapping("/quizz/{id}")
-    public List<AssignQuizz> GetAllStudentsAssignedToOneTest(@PathVariable Integer id)
+    public ResponseEntity<List<AssignQuizz>> GetAllStudentsAssignedToOneTest(@PathVariable Integer id)
     {
-        return assignQuizzService.getAllByQuizz(id);
+        List<AssignQuizz> assignQuizzes =  assignQuizzService.getAllByQuizz(id);
+        return ResponseEntity.ok().body(assignQuizzes);
     }
     @DeleteMapping("delete/{id}")
-    public Integer deleteAssignQuizz(@PathVariable Integer id)
+    public ResponseEntity<String> deleteAssignQuizz(@PathVariable Integer id)
     {
-        return assignQuizzService.deleteAssignQuizz(id);
+        Integer deleted = assignQuizzService.deleteAssignQuizz(id);
+        if(deleted == 1)
+        {
+            return ResponseEntity.ok().body("the answer is removed from the answer !");
+        }
+        return ResponseEntity.badRequest().body("the answer is not removed from the answer !");
     }
 }
