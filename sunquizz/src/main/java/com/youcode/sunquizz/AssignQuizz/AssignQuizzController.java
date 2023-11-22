@@ -1,5 +1,7 @@
 package com.youcode.sunquizz.AssignQuizz;
 
+import com.youcode.sunquizz.AssignQuizz.DTOs.AssignQuizzReqDTO;
+import com.youcode.sunquizz.AssignQuizz.DTOs.AssignQuizzRespDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +14,9 @@ public class AssignQuizzController {
     @Autowired
     AssignQuizzService assignQuizzService;
     @PostMapping
-    public ResponseEntity<List<AssignQuizz>> createAssignQuizz(@RequestBody List<AssignQuizz> assignQuizzes)
+    public ResponseEntity<List<AssignQuizzRespDTO>> createAssignQuizz(@RequestBody List<AssignQuizzReqDTO> assignQuizzes)
     {
-        List<AssignQuizz> assignQuizzes1 = assignQuizzService.createAssignQuizz(assignQuizzes);
+        List<AssignQuizzRespDTO> assignQuizzes1 = assignQuizzService.createAssignQuizz(assignQuizzes);
         if(!assignQuizzes1.isEmpty())
         {
             return ResponseEntity.ok().body(assignQuizzes1);
@@ -22,9 +24,9 @@ public class AssignQuizzController {
         return  ResponseEntity.badRequest().body(null);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<AssignQuizz> updateAssignQuizz(@PathVariable Integer id, @RequestBody AssignQuizz assignQuizz)
+    public ResponseEntity<AssignQuizzRespDTO> updateAssignQuizz(@PathVariable Integer id, @RequestBody AssignQuizzReqDTO assignQuizz)
     {
-        AssignQuizz assignQuizz1 = assignQuizzService.updateAssignQuizz(id,assignQuizz);
+        AssignQuizzRespDTO assignQuizz1 = assignQuizzService.updateAssignQuizz(id,assignQuizz);
         if(assignQuizz1!=null)
         {
         return ResponseEntity.ok().body(assignQuizz1);
@@ -32,21 +34,21 @@ public class AssignQuizzController {
         return ResponseEntity.badRequest().body(null);
     }
     @GetMapping
-    public ResponseEntity<List<AssignQuizz>> getAssignQuizzs()
+    public ResponseEntity<List<AssignQuizzRespDTO>> getAssignQuizzs()
     {
-        List<AssignQuizz> assignQuizzes =  assignQuizzService.getAll();
+        List<AssignQuizzRespDTO> assignQuizzes =  assignQuizzService.getAll();
         return ResponseEntity.ok().body(assignQuizzes);
     }
     @GetMapping("/student/{id}")
-    public ResponseEntity<List<AssignQuizz>> getAllTestsAssignToOneStudent(@PathVariable Integer id)
+    public ResponseEntity<List<AssignQuizzRespDTO>> getAllTestsAssignToOneStudent(@PathVariable Integer id)
     {
-        List<AssignQuizz> assignQuizzes =  assignQuizzService.getAllByStudent(id);
+        List<AssignQuizzRespDTO> assignQuizzes =  assignQuizzService.getAllByStudent(id);
         return ResponseEntity.ok().body(assignQuizzes);
     }
     @GetMapping("/quizz/{id}")
-    public ResponseEntity<List<AssignQuizz>> GetAllStudentsAssignedToOneTest(@PathVariable Integer id)
+    public ResponseEntity<List<AssignQuizzRespDTO>> GetAllStudentsAssignedToOneTest(@PathVariable Integer id)
     {
-        List<AssignQuizz> assignQuizzes =  assignQuizzService.getAllByQuizz(id);
+        List<AssignQuizzRespDTO> assignQuizzes =  assignQuizzService.getAllByQuizz(id);
         return ResponseEntity.ok().body(assignQuizzes);
     }
     @DeleteMapping("delete/{id}")

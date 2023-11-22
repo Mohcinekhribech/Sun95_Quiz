@@ -1,21 +1,30 @@
 package com.youcode.sunquizz.User.Student;
 
+import com.youcode.sunquizz.User.Student.DTOs.StudentReqDTO;
+import com.youcode.sunquizz.User.Student.DTOs.StudentRespDTO;
 import com.youcode.sunquizz.User.Student.Student;
 import com.youcode.sunquizz.User.Student.StudentRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class StudentService {
+public class StudentService implements StudentServiceInterface{
     @Autowired
     StudentRepository studentRepository;
+    @Autowired
+    ModelMapper modelMapper;
 
-    public Student createStudent(Student student)
+    public StudentRespDTO createStudent(StudentReqDTO student)
     {
-        return studentRepository.save(student);
+        return modelMapper.map(
+                studentRepository.save(modelMapper.map(student,Student.class)),
+                StudentRespDTO.class
+        );
     }
     public Integer deleteStudent(Integer id)
     {
@@ -27,21 +36,30 @@ public class StudentService {
         }
         return 0;
     }
-    public Student updateStudent(Integer id,Student student)
+    public StudentRespDTO updateStudent(Integer id,StudentReqDTO student)
     {
         if(studentRepository.findById(id).isPresent())
         {
             student.setId(id);
-            return studentRepository.save(student);
+            return modelMapper.map(
+                    studentRepository.save(modelMapper.map(student,Student.class)),
+                    StudentRespDTO.class
+            );
         }
         return null;
     }
-    public List<Student> getAll()
+    public List<StudentRespDTO> getAll()
     {
-        return studentRepository.findAll();
+        return studentRepository.findAll()
+                .stream()
+                .map(student -> modelMapper.map(student,StudentRespDTO.class))
+                .collect(Collectors.toList());
     }
-    public List<Student> searchByName(String name)
+    public List<StudentRespDTO> searchByName(String name)
     {
-        return studentRepository.findAllByFirstName(name);
+        return studentRepository.findAllByFirstName(name)
+                .stream()
+                .map(student -> modelMapper.map(student,StudentRespDTO.class))
+                .collect(Collectors.toList());
     }
 }

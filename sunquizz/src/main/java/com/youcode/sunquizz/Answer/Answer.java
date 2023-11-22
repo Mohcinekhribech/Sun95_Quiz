@@ -18,6 +18,6 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String text;
-    @OneToMany(mappedBy = "answer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "answer",fetch = FetchType.LAZY)
     private List<Validation> validations;
 }

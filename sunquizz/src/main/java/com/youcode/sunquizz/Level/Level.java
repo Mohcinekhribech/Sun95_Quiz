@@ -17,6 +17,7 @@ public class Level {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private String name;
     private int maxPoint;
     private int minPoint;
     @OneToMany(mappedBy = "level")

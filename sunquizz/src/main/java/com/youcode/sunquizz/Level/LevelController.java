@@ -1,8 +1,12 @@
 package com.youcode.sunquizz.Level;
 
+import com.youcode.sunquizz.Level.DTOs.LevelReqDTO;
+import com.youcode.sunquizz.Level.DTOs.LevelRespDTO;
 import com.youcode.sunquizz.Level.Level;
 import com.youcode.sunquizz.Level.LevelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +18,9 @@ public class LevelController {
     @Autowired
     LevelService levelService;
     @PostMapping
-    public ResponseEntity<Level> createLevel(@RequestBody Level level)
+    public ResponseEntity<LevelRespDTO> createLevel(@RequestBody LevelReqDTO level)
     {
-        Level level1 = levelService.createLevel(level);
+        LevelRespDTO level1 = levelService.createLevel(level);
         if(level1 != null)
         {
               return ResponseEntity.ok().body(level1);
@@ -24,9 +28,9 @@ public class LevelController {
         return ResponseEntity.badRequest().body(null);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Level> updateLevel(@PathVariable Integer id, @RequestBody Level level)
+    public ResponseEntity<LevelRespDTO> updateLevel(@PathVariable Integer id, @RequestBody LevelReqDTO level)
     {
-        Level level1 = levelService.updateLevel(level,id);
+        LevelRespDTO level1 = levelService.updateLevel(level,id);
         if(level1 != null)
         {
             return ResponseEntity.ok().body(level1);
@@ -34,12 +38,12 @@ public class LevelController {
         return ResponseEntity.badRequest().body(null);
     }
     @GetMapping
-    public ResponseEntity<List<Level>> getLevels(@RequestBody Level level)
+    public ResponseEntity<Page<LevelRespDTO>> getLevels(Pageable pageable)
     {
-        return ResponseEntity.ok().body(levelService.getLevels());
+        return ResponseEntity.ok().body(levelService.getLevels(pageable));
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Level> getLevel(@PathVariable Integer id)
+    public ResponseEntity<LevelRespDTO> getLevel(@PathVariable Integer id)
     {
         return ResponseEntity.ok().body(levelService.getLevel(id));
     }

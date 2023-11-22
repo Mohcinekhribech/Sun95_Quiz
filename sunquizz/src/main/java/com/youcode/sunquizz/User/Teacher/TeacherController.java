@@ -1,5 +1,7 @@
 package com.youcode.sunquizz.User.Teacher;
 
+import com.youcode.sunquizz.User.Teacher.DTOs.TeacherReqDTO;
+import com.youcode.sunquizz.User.Teacher.DTOs.TeacherRespDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +14,9 @@ public class TeacherController {
     @Autowired
     TeacherService teacherService;
     @PostMapping
-    public ResponseEntity<Teacher> createTeacher(@RequestBody Teacher teacher)
+    public ResponseEntity<TeacherRespDTO> createTeacher(@RequestBody TeacherReqDTO teacher)
     {
-        Teacher teacher1 = teacherService.createTeacher(teacher);
+        TeacherRespDTO teacher1 = teacherService.createTeacher(teacher);
         if(teacher1 != null)
         {
             return ResponseEntity.ok().body(teacher1);
@@ -22,9 +24,9 @@ public class TeacherController {
         return ResponseEntity.badRequest().body(null);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Teacher> updateTeacher(@PathVariable Integer id, @RequestBody Teacher teacher)
+    public ResponseEntity<TeacherRespDTO> updateTeacher(@PathVariable Integer id, @RequestBody TeacherReqDTO teacher)
     {
-        Teacher teacher1 = teacherService.updateTeacher(id,teacher);
+        TeacherRespDTO teacher1 = teacherService.updateTeacher(id,teacher);
         if(teacher1 != null)
         {
             return ResponseEntity.ok().body(teacher1);
@@ -32,12 +34,12 @@ public class TeacherController {
         return ResponseEntity.badRequest().body(null);
     }
     @GetMapping
-    public ResponseEntity<List<Teacher>> getTeachers()
+    public ResponseEntity<List<TeacherRespDTO>> getTeachers()
     {
         return ResponseEntity.ok().body(teacherService.getAll());
     }
     @GetMapping("/search/{name}")
-    public ResponseEntity<List<Teacher>> getTeacher(@PathVariable String name)
+    public ResponseEntity<List<TeacherRespDTO>> getTeacher(@PathVariable String name)
     {
         return ResponseEntity.ok().body(teacherService.searchByName(name));
     }

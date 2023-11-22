@@ -1,43 +1,46 @@
 package com.youcode.sunquizz.Answer;
 
-import com.youcode.sunquizz.Answer.Answer;
-import com.youcode.sunquizz.Answer.AnswerRepository;
+
+import com.youcode.sunquizz.Answer.DTOs.AnswerReqDTO;
+import com.youcode.sunquizz.Answer.DTOs.AnswerRespDTO;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class AnswerService {
+public class AnswerService implements AnswerServiceInterface{
     AnswerRepository answerRepository;
+    ModelMapper modelMapper;
+
     @Autowired
-    public AnswerService(AnswerRepository answerRepository)
+    public AnswerService(AnswerRepository answerRepository,ModelMapper modelMapper)
     {
         this.answerRepository = answerRepository;
+        this.modelMapper = modelMapper;
     }
-    public Answer getAnswer(Integer id)
+    public AnswerRespDTO getAnswer(Integer id)
     {
         Optional<Answer> answer = answerRepository.findById(id);
-        if (answer.isPresent()) {
-            return answer.get();
-        }
-        return null;
+        return modelMapper.map(answer.orElse(null),AnswerRespDTO.class);
     }
-    public List<Answer> getAnswers()
+    public List<AnswerRespDTO> getAnswers()
     {
-        return answerRepository.findAll();
+        return answerRepository.findAll().stream().map(answer -> modelMapper.map(answer, AnswerRespDTO.class)).collect(Collectors.toList());
     }
-    public Answer createAnswer(Answer answer)
+    public AnswerRespDTO createAnswer(AnswerReqDTO answer)
     {
-        return answerRepository.save(answer);
+        return modelMapper.map(answerRepository.save(modelMapper.map(answer,Answer.class)),AnswerRespDTO.class);
     }
-    public Answer updateAnswer(Answer answer,Integer id)
+    public AnswerRespDTO updateAnswer(AnswerReqDTO answer, Integer id)
     {
         Optional<Answer> existAnswer = answerRepository.findById(id);
         if(existAnswer.isPresent()) {
             answer.setId(existAnswer.get().getId());
-            return answerRepository.save(answer);
+            return modelMapper.map(answerRepository.save(modelMapper.map(answer,Answer.class)),AnswerRespDTO.class);
         }
         return null;
     }

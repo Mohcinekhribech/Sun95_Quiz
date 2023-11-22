@@ -1,45 +1,59 @@
 package com.youcode.sunquizz.Subject;
 
+import com.youcode.sunquizz.Question.DTOs.QuestionRespDTO;
+import com.youcode.sunquizz.Question.Question;
+import com.youcode.sunquizz.Subject.DTOs.SubjectReqDTO;
+import com.youcode.sunquizz.Subject.DTOs.SubjectRespDTO;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SubjectService {
     SubjectRepository subjectRepository;
     @Autowired
+    ModelMapper modelMapper;
+    Optional<Subject> subjectOptional;
+    @Autowired
     public SubjectService(SubjectRepository subjectRepository)
     {
         this.subjectRepository = subjectRepository;
     }
-    public Subject getSubjectByTitle(String title)
+    public SubjectRespDTO getSubjectByTitle(String title)
     {
-        return subjectRepository.findByTitle(title).get();
+        subjectOptional = subjectRepository.findByTitle(title);
+        return modelMapper.map(subjectOptional.orElse(null),SubjectRespDTO.class);
     }
-    public Subject getSubject(Integer id)
+    public List<SubjectRespDTO> getSubjects()
     {
-        return subjectRepository.findById(id).get();
+        return subjectRepository.findAll().stream()
+                .map(subject -> modelMapper.map(subject,SubjectRespDTO.class))
+                .collect(Collectors.toList());
     }
-    public List<Subject> getSubjects()
+    public SubjectRespDTO createSubject(SubjectReqDTO subject)
     {
-        return subjectRepository.findAll();
+        Subject subjectE = modelMapper.map(subject,Subject.class);
+        subjectOptional = subjectRepository.findById(subject.getParentSubject_id());
+        subjectOptional.ifPresent(subjectE::setParentSubject);
+        subjectE = subjectRepository.save(subjectE);
+        return modelMapper.map(subjectE, SubjectRespDTO.class);
     }
-    public List<Subject> getSubSubject(Subject parentSubject)
+    public SubjectRespDTO updateSubject(SubjectReqDTO subject,Integer id)
     {
-        return subjectRepository.findAllByParentSubject(parentSubject);
-    }
-    public Subject createSubject(Subject subject)
-    {
-        return subjectRepository.save(subject);
-    }
-    public Subject updateSubject(Subject subject,Integer id)
-    {
-        Optional<Subject> existSubject = subjectRepository.findById(id);
-        if(existSubject.isPresent()) {
-            subject.setId(existSubject.get().getId());
-            return subjectRepository.save(subject);
+        subjectOptional = subjectRepository.findById(id);
+        if(subjectOptional.isPresent()) {
+            Subject subjectE = modelMapper.map(subject,Subject.class);
+            subject.setId(id);
+            subjectOptional = subjectRepository.findById(subject.getParentSubject_id());
+            subjectOptional.ifPresent(subjectE::setParentSubject);
+            return modelMapper.map(
+                    subjectRepository.save(modelMapper.map(subject,Subject.class)),
+                    SubjectRespDTO.class
+                    );
         }
         return null;
     }

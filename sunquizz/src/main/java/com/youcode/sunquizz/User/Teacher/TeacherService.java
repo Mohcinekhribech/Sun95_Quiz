@@ -1,19 +1,29 @@
 package com.youcode.sunquizz.User.Teacher;
 
+import com.youcode.sunquizz.User.Teacher.DTOs.TeacherReqDTO;
+import com.youcode.sunquizz.User.Teacher.DTOs.TeacherRespDTO;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class TeacherService {
+public class TeacherService implements TeacherServiceInterface{
     @Autowired
     TeacherRepository teacherRepository;
+    @Autowired
+    ModelMapper modelMapper;
 
-    public Teacher createTeacher(Teacher teacher)
+    public TeacherRespDTO createTeacher(TeacherReqDTO teacher)
     {
-        return teacherRepository.save(teacher);
+        return modelMapper.map(
+                teacherRepository.save(modelMapper.map(
+                        teacher,Teacher.class
+                )),TeacherRespDTO.class
+        );
     }
     public Integer deleteTeacher(Integer id)
     {
@@ -25,21 +35,31 @@ public class TeacherService {
         }
         return 0;
     }
-    public Teacher updateTeacher(Integer id,Teacher teacher)
+    public TeacherRespDTO updateTeacher(Integer id, TeacherReqDTO teacher)
     {
         if(teacherRepository.findById(id).isPresent())
         {
             teacher.setId(id);
-            return teacherRepository.save(teacher);
+            return modelMapper.map(
+                    teacherRepository.save(modelMapper.map(
+                            teacher,Teacher.class
+                    )),TeacherRespDTO.class
+            );
         }
         return null;
     }
-    public List<Teacher> getAll()
+    public List<TeacherRespDTO> getAll()
     {
-        return teacherRepository.findAll();
+        return teacherRepository.findAll()
+                .stream()
+                .map(teacher -> modelMapper.map(teacher,TeacherRespDTO.class))
+                .collect(Collectors.toList());
     }
-    public List<Teacher> searchByName(String name)
+    public List<TeacherRespDTO> searchByName(String name)
     {
-        return teacherRepository.findAllByFirstName(name);
+        return teacherRepository.findAllByFirstName(name)
+                .stream()
+                .map(teacher -> modelMapper.map(teacher,TeacherRespDTO.class))
+                .collect(Collectors.toList());
     }
 }

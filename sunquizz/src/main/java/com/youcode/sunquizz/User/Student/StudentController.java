@@ -1,5 +1,7 @@
 package com.youcode.sunquizz.User.Student;
 
+import com.youcode.sunquizz.User.Student.DTOs.StudentReqDTO;
+import com.youcode.sunquizz.User.Student.DTOs.StudentRespDTO;
 import com.youcode.sunquizz.User.Student.Student;
 import com.youcode.sunquizz.User.Student.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,9 @@ public class StudentController {
     @Autowired
     StudentService studentService;
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student)
+    public ResponseEntity<StudentRespDTO> createStudent(@RequestBody StudentReqDTO student)
     {
-        Student student1 = studentService.createStudent(student);
+        StudentRespDTO student1 = studentService.createStudent(student);
         if(student1 != null)
         {
             return ResponseEntity.ok().body(student1);
@@ -24,9 +26,9 @@ public class StudentController {
         return ResponseEntity.badRequest().body(null);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Integer id, @RequestBody Student student)
+    public ResponseEntity<StudentRespDTO> updateStudent(@PathVariable Integer id, @RequestBody StudentReqDTO student)
     {
-        Student student1 = studentService.updateStudent(id,student);
+        StudentRespDTO student1 = studentService.updateStudent(id,student);
         if(student1 != null)
         {
             return ResponseEntity.ok().body(student1);
@@ -34,12 +36,12 @@ public class StudentController {
         return ResponseEntity.badRequest().body(null);
     }
     @GetMapping
-    public ResponseEntity<List<Student>> getStudents()
+    public ResponseEntity<List<StudentRespDTO>> getStudents()
     {
         return ResponseEntity.ok().body(studentService.getAll());
     }
     @GetMapping("/search/{name}")
-    public ResponseEntity<List<Student>> getStudent(@PathVariable String name)
+    public ResponseEntity<List<StudentRespDTO>> getStudent(@PathVariable String name)
     {
         return ResponseEntity.ok().body(studentService.searchByName(name));
     }

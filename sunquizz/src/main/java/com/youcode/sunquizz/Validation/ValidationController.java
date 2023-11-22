@@ -1,5 +1,7 @@
 package com.youcode.sunquizz.Validation;
 
+import com.youcode.sunquizz.Validation.DTOs.ValidationReqDTO;
+import com.youcode.sunquizz.Validation.DTOs.ValidationRespDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +14,10 @@ public class ValidationController {
     @Autowired
     ValidationService validationService;
     @PostMapping
-    public ResponseEntity<Validation> createValidation(@RequestBody Validation validation)
+    public ResponseEntity<ValidationRespDTO> createValidation(@RequestBody ValidationReqDTO validation)
     {
-        Validation validation1 = validationService.createValidation(validation);
+
+        ValidationRespDTO validation1 = validationService.createValidation(validation);
         if(validation1 != null)
         {
             return ResponseEntity.ok().body(validation1);
@@ -22,18 +25,18 @@ public class ValidationController {
         return ResponseEntity.badRequest().body(null);
     }
     @GetMapping("/question/{id}")
-    public ResponseEntity<List<Validation>> getAllByQuestion(@PathVariable Integer id)
+    public ResponseEntity<List<ValidationRespDTO>> getAllByQuestion(@PathVariable Integer id)
     {
         return ResponseEntity.ok().body(validationService.getAnswersByQuestion(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<Validation>> getValidations(@RequestBody Validation validation)
+    public ResponseEntity<List<ValidationRespDTO>> getValidations()
     {
         return ResponseEntity.ok().body(validationService.getValidations());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Validation> getValidation(@PathVariable Integer id)
+    public ResponseEntity<ValidationRespDTO> getValidation(@PathVariable Integer id)
     {
         return ResponseEntity.ok().body(validationService.getValidation(id));
     }

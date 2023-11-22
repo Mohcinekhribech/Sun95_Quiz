@@ -3,9 +3,12 @@ package com.youcode.sunquizz.Question;
 import com.youcode.sunquizz.Answer.Answer;
 import com.youcode.sunquizz.Answer.AnswerService;
 import com.youcode.sunquizz.Level.Level;
+import com.youcode.sunquizz.Question.DTOs.QuestionReqDTO;
+import com.youcode.sunquizz.Question.DTOs.QuestionRespDTO;
 import com.youcode.sunquizz.Question.Question;
 import com.youcode.sunquizz.Question.QuestionService;
 import com.youcode.sunquizz.Validation.Validation;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,14 +17,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/question")
+@RequestMapping("question")
 public class QuestionController {
     @Autowired
     QuestionService questionService;
+    ModelMapper modelMapper;
     @PostMapping
-    public ResponseEntity<Question> createQuestion(@RequestBody Question question)
+    public ResponseEntity<QuestionRespDTO> createQuestion(@RequestBody QuestionReqDTO question)
     {
-        Question question1 = questionService.createQuestion(question);
+        QuestionRespDTO question1 = questionService.createQuestion(question);
         if(question1 != null)
         {
             return  ResponseEntity.ok().body(question1);
@@ -29,9 +33,9 @@ public class QuestionController {
         return ResponseEntity.badRequest().body(null);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Question> updateQuestion(@PathVariable Integer id, @RequestBody Question question)
+    public ResponseEntity<QuestionRespDTO> updateQuestion(@PathVariable Integer id, @RequestBody QuestionReqDTO question)
     {
-        Question question1 = questionService.updateQuestion(question,id);;
+        QuestionRespDTO question1 = questionService.updateQuestion(question,id);;
         if(question1 != null)
         {
             return  ResponseEntity.ok().body(question1);
@@ -39,12 +43,12 @@ public class QuestionController {
         return ResponseEntity.badRequest().body(null);
     }
     @GetMapping
-    public ResponseEntity<List<Question>> getQuestions(@RequestBody Question question)
+    public ResponseEntity<List<QuestionRespDTO>> getQuestions()
     {
         return ResponseEntity.ok().body(questionService.getQuestions());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Question> getQuestion(@PathVariable Integer id)
+    public ResponseEntity<QuestionRespDTO> getQuestion(@PathVariable Integer id)
     {
         return ResponseEntity.ok().body(questionService.getQuestion(id));
     }
@@ -59,12 +63,12 @@ public class QuestionController {
         return ResponseEntity.ok().body("question not deleted");
     }
     @GetMapping("by_level/{id}")
-    public ResponseEntity<List<Question>> getQuestionByLevel(@PathVariable Integer id)
+    public ResponseEntity<List<QuestionRespDTO>> getQuestionByLevel(@PathVariable Integer id)
     {
         return ResponseEntity.ok().body(questionService.getQuestionByLevel(id));
     }
     @GetMapping("by_subject/{id}")
-    public ResponseEntity<List<Question>> getQuestionBySubject(@PathVariable Integer id)
+    public ResponseEntity<List<QuestionRespDTO>> getQuestionBySubject(@PathVariable Integer id)
     {
         return ResponseEntity.ok().body(questionService.getQuestionBySubject(id));
     }

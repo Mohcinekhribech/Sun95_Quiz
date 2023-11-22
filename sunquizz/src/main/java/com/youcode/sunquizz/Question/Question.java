@@ -1,7 +1,9 @@
 package com.youcode.sunquizz.Question;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonMerge;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.youcode.sunquizz.Answer.Answer;
 import com.youcode.sunquizz.Level.Level;
 import com.youcode.sunquizz.Media.Media;
@@ -30,10 +32,14 @@ public class Question {
     @ManyToOne
     @JoinColumn(name = "level_id",referencedColumnName = "id")
     private Level level;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
     private List<Validation> validations;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
     private List<QuizzQuestion> quizzQuestions;
+
     @ManyToOne
     @JoinColumn(name = "media_id",referencedColumnName = "id")
     private Media media;

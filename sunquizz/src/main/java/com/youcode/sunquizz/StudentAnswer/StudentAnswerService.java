@@ -1,6 +1,11 @@
 package com.youcode.sunquizz.StudentAnswer;
 import com.youcode.sunquizz.AssignQuizz.AssignQuizz;
+import com.youcode.sunquizz.AssignQuizz.AssignQuizzRepository;
 import com.youcode.sunquizz.User.Teacher.Teacher;
+import com.youcode.sunquizz.Validation.DTOs.ValidationRespDTO;
+import com.youcode.sunquizz.Validation.Validation;
+import com.youcode.sunquizz.Validation.ValidationRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,37 +13,32 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StudentAnswerService {
+public class StudentAnswerService implements StudentAnswerServiceInterface{
     @Autowired
-    StudentAnswerRepository studentAnswerRepository;
+    AssignQuizzRepository assignQuizzRepository;
+    @Autowired
+    ValidationRepository validationRepository;
 
-    public StudentAnswer createStudentAnswer(StudentAnswer studentAnswer)
+    public void createStudentAnswer(int assignQuizz_id,int validation_id)
     {
-        return studentAnswerRepository.save(studentAnswer);
+        AssignQuizz assignQuizz = assignQuizzRepository.findById(assignQuizz_id).orElseThrow(EntityNotFoundException::new);
+        Validation validation = validationRepository.findById(validation_id).orElseThrow(EntityNotFoundException::new);
+
+        validation.getAssignQuizzes().add(assignQuizz);
+        assignQuizz.getValidations().add(validation);
+
+        assignQuizzRepository.save(assignQuizz);
+        validationRepository.save(validation);
     }
-    public Integer deleteStudentAnswer(Integer id)
+    public void removeStudentAnswer(int assignQuizz_id,int validation_id)
     {
-        Optional<StudentAnswer> studentAnswerOptional = studentAnswerRepository.findById(id);
-        if(studentAnswerOptional.isPresent())
-        {
-            studentAnswerRepository.delete(studentAnswerOptional.get());
-            return 1;
-        }
-        return 0;
-    }
-    public StudentAnswer updateStudentAnswer(Integer id,StudentAnswer studentAnswer)
-    {
-        if(studentAnswerRepository.findById(id).isPresent())
-        {
-            studentAnswer.setId(id);
-            return studentAnswerRepository.save(studentAnswer);
-        }
-        return null;
-    }
-    public List<StudentAnswer> getAllAnswersByStudent(Integer id)
-    {
-        AssignQuizz assignQuizz=new AssignQuizz();
-        assignQuizz.setId(id);
-        return studentAnswerRepository.findAllByAssignQuizz(assignQuizz);
+        AssignQuizz assignQuizz = assignQuizzRepository.findById(assignQuizz_id).orElseThrow(EntityNotFoundException::new);
+        Validation validation = validationRepository.findById(validation_id).orElseThrow(EntityNotFoundException::new);
+
+        validation.getAssignQuizzes().remove(assignQuizz);
+        assignQuizz.getValidations().remove(validation);
+
+        assignQuizzRepository.save(assignQuizz);
+        validationRepository.save(validation);
     }
 }

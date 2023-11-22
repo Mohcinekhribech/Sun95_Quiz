@@ -1,9 +1,7 @@
 package com.youcode.sunquizz.Media;
 
 import com.youcode.sunquizz.Question.Question;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.HashSet;
@@ -13,6 +11,7 @@ import java.util.Set;
 @Data
 public class Media {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private MediaType type;
     private String link;

@@ -1,6 +1,8 @@
 package com.youcode.sunquizz.Media;
 
 import com.youcode.sunquizz.Level.Level;
+import com.youcode.sunquizz.Media.DTOs.MediaReqDTO;
+import com.youcode.sunquizz.Media.DTOs.MediaRespDTO;
 import com.youcode.sunquizz.Media.Media;
 import com.youcode.sunquizz.Media.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +17,9 @@ public class MediaController {
     @Autowired
     MediaService mediaService;
     @PostMapping
-    public ResponseEntity<Media> createMedia(@RequestBody Media media)
+    public ResponseEntity<MediaRespDTO> createMedia(@RequestBody MediaReqDTO media)
     {
-        Media media1 = mediaService.createMedia(media);
+        MediaRespDTO media1 = mediaService.createMedia(media);
         if(media1 != null)
         {
             return ResponseEntity.ok().body(media1);
@@ -25,9 +27,9 @@ public class MediaController {
         return ResponseEntity.badRequest().body(null);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Media> updateMedia(@PathVariable Integer id, @RequestBody Media media)
+    public ResponseEntity<MediaRespDTO> updateMedia(@PathVariable Integer id, @RequestBody MediaReqDTO media)
     {
-        Media media1 = mediaService.updateMedia(media,id);
+        MediaRespDTO media1 = mediaService.updateMedia(media,id);
         if(media1 != null)
         {
             return ResponseEntity.ok().body(media1);
@@ -35,17 +37,17 @@ public class MediaController {
         return ResponseEntity.badRequest().body(null);
     }
     @GetMapping
-    public ResponseEntity<List<Media>> getMedias(@RequestBody Media media)
+    public ResponseEntity<List<MediaRespDTO>> getMedias()
     {
         return ResponseEntity.ok().body(mediaService.getMedias());
     }
     @GetMapping("/type/{mediaType}")
-    public ResponseEntity<List<Media>> getMediasByType(@PathVariable MediaType mediaType)
+    public ResponseEntity<List<MediaRespDTO>> getMediasByType(@PathVariable MediaType mediaType)
     {
         return ResponseEntity.ok().body(mediaService.getMediaByType(mediaType));
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Media> getMedia(@PathVariable Integer id)
+    public ResponseEntity<MediaRespDTO> getMedia(@PathVariable Integer id)
     {
         return ResponseEntity.ok().body(mediaService.getMedia(id));
     }
