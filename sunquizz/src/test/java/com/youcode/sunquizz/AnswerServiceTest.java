@@ -90,9 +90,10 @@
 //        expectedResponse.setId(answer.getId());
 //        expectedResponse.setText(answer.getText());
 //
-//        when(answerRepository.save(any(Answer.class))).thenReturn(answer);
+//        when(answerRepository.save(answer)).thenReturn(answer);
 //
-//        when(modelMapper.map(any(), any())).thenReturn(expectedResponse);
+//        when(modelMapper.map(requestDTO, Answer.class)).thenReturn(answer);
+//        when(modelMapper.map(answer, AnswerRespDTO.class)).thenReturn(expectedResponse);
 //
 //        AnswerRespDTO actualResponse = answerService.createAnswer(requestDTO);
 //
@@ -115,7 +116,8 @@
 //        when(answerRepository.findById(1)).thenReturn(Optional.of(existingAnswer));
 //        when(answerRepository.save(any(Answer.class))).thenReturn(existingAnswer);
 //
-//        when(modelMapper.map(any(), any())).thenReturn(expectedResponse);
+//        when(modelMapper.map(requestDTO, Answer.class)).thenReturn(existingAnswer);
+//        when(modelMapper.map(existingAnswer, AnswerRespDTO.class)).thenReturn(expectedResponse);
 //
 //        AnswerRespDTO actualResponse = answerService.updateAnswer(requestDTO, 1);
 //
