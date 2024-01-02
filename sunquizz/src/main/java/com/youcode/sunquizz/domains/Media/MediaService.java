@@ -2,6 +2,7 @@ package com.youcode.sunquizz.domains.Media;
 
 import com.youcode.sunquizz.domains.Media.DTOs.MediaReqDTO;
 import com.youcode.sunquizz.domains.Media.DTOs.MediaRespDTO;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,25 +14,26 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class MediaService implements MediaServiceInterface{
     MediaRepository mediaRepository;
-    @Autowired
     ModelMapper modelMapper;
-    @Autowired
-    public MediaService(MediaRepository mediaRepository)
-    {
-        this.mediaRepository = mediaRepository;
-    }
+
+    //get one media
     public MediaRespDTO getMedia(Integer id)
     {
         Optional<Media> media = mediaRepository.findById(id);
         return modelMapper.map(media.orElse(null),MediaRespDTO.class);
     }
+
+    //get all medias
     public Page<MediaRespDTO> getMedias(Pageable pageable)
     {
         Page<Media> entityPage = mediaRepository.findAll(pageable);
         return entityPage.map(entity -> modelMapper.map(entity, MediaRespDTO.class));
     }
+
+    // get all media by his type
     public List<MediaRespDTO> getMediaByType(MediaType type)
     {
         return mediaRepository.findAllByType(type)
@@ -39,6 +41,8 @@ public class MediaService implements MediaServiceInterface{
                 .map(media -> modelMapper.map(media,MediaRespDTO.class))
                 .collect(Collectors.toList());
     }
+
+    //create media
     public MediaRespDTO createMedia(MediaReqDTO media)
     {
         return modelMapper.map(
@@ -47,6 +51,8 @@ public class MediaService implements MediaServiceInterface{
                 MediaRespDTO.class
         );
     }
+
+    //update media
     public MediaRespDTO updateMedia(MediaReqDTO media,Integer id)
     {
         Optional<Media> existMedia = mediaRepository.findById(id);
@@ -59,6 +65,8 @@ public class MediaService implements MediaServiceInterface{
             );
         }).orElse(null);
     }
+
+    //delete media
     public Integer deleteMedia(Integer id)
     {
         Optional<Media> media = mediaRepository.findById(id);

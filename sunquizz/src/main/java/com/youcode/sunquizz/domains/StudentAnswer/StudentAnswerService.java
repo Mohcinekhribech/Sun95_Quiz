@@ -4,16 +4,17 @@ import com.youcode.sunquizz.domains.AssignQuizz.AssignQuizzRepository;
 import com.youcode.sunquizz.domains.Validation.Validation;
 import com.youcode.sunquizz.domains.Validation.ValidationRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class StudentAnswerService implements StudentAnswerServiceInterface{
-    @Autowired
     AssignQuizzRepository assignQuizzRepository;
-    @Autowired
     ValidationRepository validationRepository;
 
+    // save a student answer in a quiz
     public void createStudentAnswer(Integer assignQuizz_id,Integer validation_id)
     {
         AssignQuizz assignQuizz = assignQuizzRepository.findById(assignQuizz_id).orElseThrow(EntityNotFoundException::new);
@@ -25,6 +26,8 @@ public class StudentAnswerService implements StudentAnswerServiceInterface{
         assignQuizzRepository.save(assignQuizz);
         validationRepository.save(validation);
     }
+
+    // remove a student answer from  a quiz
     public void removeStudentAnswer(int assignQuizz_id,int validation_id)
     {
         AssignQuizz assignQuizz = assignQuizzRepository.findById(assignQuizz_id).orElseThrow(EntityNotFoundException::new);

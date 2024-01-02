@@ -2,6 +2,7 @@ package com.youcode.sunquizz.domains.User.Teacher;
 
 import com.youcode.sunquizz.domains.User.Teacher.DTOs.TeacherReqDTO;
 import com.youcode.sunquizz.domains.User.Teacher.DTOs.TeacherRespDTO;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,12 +14,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class TeacherService implements TeacherServiceInterface{
-    @Autowired
     TeacherRepository teacherRepository;
-    @Autowired
     ModelMapper modelMapper;
 
+    //create a teacher
     public TeacherRespDTO createTeacher(TeacherReqDTO teacher)
     {
         return modelMapper.map(
@@ -27,6 +28,8 @@ public class TeacherService implements TeacherServiceInterface{
                 )),TeacherRespDTO.class
         );
     }
+
+    // delete a teacher
     public Integer deleteTeacher(Integer id)
     {
         Optional<Teacher> teacherOptional = teacherRepository.findById(id);
@@ -35,6 +38,8 @@ public class TeacherService implements TeacherServiceInterface{
             return 1;
         }).orElse(0);
     }
+
+    // update the teacher info
     public TeacherRespDTO updateTeacher(Integer id, TeacherReqDTO teacher)
     {
         Optional<Teacher> teacherOptional = teacherRepository.findById(id);
@@ -48,17 +53,20 @@ public class TeacherService implements TeacherServiceInterface{
         }).orElse(null);
     }
 
-    @Override
+    // get one teacher
     public TeacherRespDTO getTeacher(Integer id) {
         Optional<Teacher> teacher = teacherRepository.findById(id);
         return modelMapper.map(teacher.orElse(null), TeacherRespDTO.class);
     }
 
+    // get all teacher , paginated
     public Page<TeacherRespDTO> getAll(Pageable pageable)
     {
         Page<Teacher> entityPage = teacherRepository.findAll(pageable);
         return entityPage.map(entity -> modelMapper.map(entity, TeacherRespDTO.class));
     }
+
+    // search the teachers by name
     public List<TeacherRespDTO> searchByName(String name)
     {
         return teacherRepository.findAllByFirstName(name)

@@ -6,6 +6,8 @@ import com.youcode.sunquizz.domains.Quizz.Quizz;
 import com.youcode.sunquizz.domains.Quizz.QuizzRepository;
 import com.youcode.sunquizz.domains.User.Student.Student;
 import com.youcode.sunquizz.domains.User.Student.StudentRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,18 +17,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
+@NoArgsConstructor
 public class AssignQuizzService {
-    @Autowired
     AssignQuizzRepository assignQuizzRepository;
-    @Autowired
     ModelMapper modelMapper;
-    @Autowired
     QuizzRepository quizzRepository;
-    @Autowired
     StudentRepository studentRepository;
     Optional<Quizz> quizz;
     Optional<Student> student;
 
+    //save all the students assignment for a quiz
     public List<AssignQuizzRespDTO> createAssignQuizz(List<AssignQuizzReqDTO> assignQuizzes)
     {
         List<AssignQuizz> assignQuizzes1 = assignQuizzes.stream()
@@ -34,17 +35,23 @@ public class AssignQuizzService {
                     AssignQuizz assignQuizzE =  modelMapper.map(assignQuizze,AssignQuizz.class);
                     quizz = quizzRepository.findById(assignQuizze.getQuizz_id());
                     student = studentRepository.findById(assignQuizze.getStudent_id());
+
+                    //check if a quiz and student exist
                     if(quizz.isPresent() && student.isPresent()){
                         assignQuizzE.setQuizz(quizz.get());
                         assignQuizzE.setStudent(student.get());
                     }
                     return assignQuizzE;
                 }).collect(Collectors.toList());
+
+        //save all data
         return assignQuizzRepository.saveAll(assignQuizzes1)
                 .stream()
                 .map(assignQuizz -> modelMapper.map(assignQuizz,AssignQuizzRespDTO.class))
                 .collect(Collectors.toList());
     }
+
+    //remove a student assignment from a quiz
     public Integer deleteAssignQuizz(Integer id)
     {
         Optional<AssignQuizz> assignQuizzOptional = assignQuizzRepository.findById(id);
@@ -53,6 +60,8 @@ public class AssignQuizzService {
             return 1;
         }).orElse(0);
     }
+
+    // update  a student assignment
     public AssignQuizzRespDTO updateAssignQuizz(Integer id,AssignQuizzReqDTO assignQuizz)
     {
         Optional<AssignQuizz> assignQuizzOptional = assignQuizzRepository.findById(id);
@@ -64,6 +73,8 @@ public class AssignQuizzService {
             );
         }).orElse(null);
     }
+
+    //get all the assignment
     public List<AssignQuizzRespDTO> getAll()
     {
         return assignQuizzRepository.findAll()
@@ -71,6 +82,8 @@ public class AssignQuizzService {
                 .map(assignQuizz -> modelMapper.map(assignQuizz,AssignQuizzRespDTO.class))
                 .collect(Collectors.toList());
     }
+
+    //get all assignment in a quiz
     public List<AssignQuizzRespDTO> getAllByQuizz(Integer id)
     {
         Quizz quizz=new Quizz();
@@ -80,6 +93,8 @@ public class AssignQuizzService {
                 .map(assignQuizz -> modelMapper.map(assignQuizz,AssignQuizzRespDTO.class))
                 .collect(Collectors.toList());
     }
+
+    // get all a student assignment
     public List<AssignQuizzRespDTO> getAllByStudent(Integer id)
     {
         Student student=new Student();

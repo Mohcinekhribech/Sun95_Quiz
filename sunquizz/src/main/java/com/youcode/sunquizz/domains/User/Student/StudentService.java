@@ -2,6 +2,7 @@ package com.youcode.sunquizz.domains.User.Student;
 
 import com.youcode.sunquizz.domains.User.Student.DTOs.StudentReqDTO;
 import com.youcode.sunquizz.domains.User.Student.DTOs.StudentRespDTO;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,12 +15,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class StudentService implements StudentServiceInterface{
-    @Autowired
     StudentRepository studentRepository;
-    @Autowired
     ModelMapper modelMapper;
 
+    // create a student
     public StudentRespDTO createStudent(StudentReqDTO student)
     {
         student.setRegistrationDate(LocalDate.now());
@@ -28,6 +29,8 @@ public class StudentService implements StudentServiceInterface{
                 StudentRespDTO.class
         );
     }
+
+    // delete a student
     public Integer deleteStudent(Integer id)
     {
         Optional<Student> studentOptional = studentRepository.findById(id);
@@ -37,10 +40,13 @@ public class StudentService implements StudentServiceInterface{
         }).orElse(0);
     }
 
+    // get one student
     public StudentRespDTO getStudent(Integer id) {
         Optional<Student> student = studentRepository.findById(id);
         return modelMapper.map(student.orElse(null), StudentRespDTO.class);
     }
+
+    // update student
     public StudentRespDTO updateStudent(Integer id,StudentReqDTO student)
     {
         Optional<Student> studentOptional = studentRepository.findById(id);
@@ -52,11 +58,15 @@ public class StudentService implements StudentServiceInterface{
             );
         }).orElse(null);
     }
+
+    // get all student , paginated
     public Page<StudentRespDTO> getAll(Pageable pageable)
     {
         Page<Student> entityPage = studentRepository.findAll(pageable);
         return entityPage.map(entity -> modelMapper.map(entity, StudentRespDTO.class));
     }
+
+    // get all student by name
     public List<StudentRespDTO> searchByName(String name)
     {
         return studentRepository.findAllByFirstName(name)

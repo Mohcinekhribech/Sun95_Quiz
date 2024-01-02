@@ -16,6 +16,6 @@ public class MessageReqDTO {
     private long id;
     private String content;
     private Long room_id;
-    private UserDTO sender;
+    private Integer sender_id;
     private LocalTime time;
 }

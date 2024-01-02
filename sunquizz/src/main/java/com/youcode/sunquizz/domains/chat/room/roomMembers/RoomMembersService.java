@@ -3,6 +3,8 @@ package com.youcode.sunquizz.domains.chat.room.roomMembers;
 
 import com.youcode.sunquizz.Security.User.User;
 import com.youcode.sunquizz.Security.User.UserRepository;
+import com.youcode.sunquizz.domains.chat.room.Room;
+import com.youcode.sunquizz.domains.chat.room.RoomRepository;
 import com.youcode.sunquizz.domains.chat.room.roomMembers.dtos.RoomMembersReqDTO;
 import com.youcode.sunquizz.domains.chat.room.roomMembers.dtos.RoomMembersRespDTO;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 @Service
 public class RoomMembersService implements RoomMembersServiceInterface {
     RoomMembersRepository roomMembersRepository;
+    RoomRepository roomRepository;
     UserRepository userRepository;
     ModelMapper modelMapper;
 
@@ -41,11 +44,17 @@ public class RoomMembersService implements RoomMembersServiceInterface {
     }
 
     public RoomMembersRespDTO createRoomMembers(RoomMembersReqDTO room) {
-        return modelMapper.map(
-                roomMembersRepository
-                        .save(modelMapper.map(room, RoomMembers.class)),
-                RoomMembersRespDTO.class
-        );
+        Optional<User> user = userRepository.findById(room.getMember_id());
+        Optional<Room> room1 = roomRepository.findById(room.getRoom_id());
+        if (user.isPresent() && room1.isPresent())
+        {
+            RoomMembers roomMembers = modelMapper.map(room,RoomMembers.class);
+            roomMembers.setMember(user.get());
+            roomMembers.setRoom(room1.get());
+            roomMembers = roomMembersRepository.save(roomMembers);
+            return modelMapper.map(roomMembers,RoomMembersRespDTO.class);
+        }
+        return null;
     }
 
     public RoomMembersRespDTO updateRoomMembers(RoomMembersReqDTO room, Long id) {

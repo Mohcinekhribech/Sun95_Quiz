@@ -3,19 +3,23 @@ package com.youcode.sunquizz.domains.Answer;
 
 import com.youcode.sunquizz.domains.Answer.DTOs.AnswerReqDTO;
 import com.youcode.sunquizz.domains.Answer.DTOs.AnswerRespDTO;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@AllArgsConstructor
+@Validated
 @RequestMapping("/answer")
 public class AnswerController {
-    @Autowired
     AnswerService answerService;
     @PostMapping
-    public ResponseEntity<AnswerRespDTO> createAnswer(@RequestBody AnswerReqDTO answer)
+    public ResponseEntity<AnswerRespDTO> createAnswer(@Valid @RequestBody AnswerReqDTO answer)
     {
         AnswerRespDTO answer1 = answerService.createAnswer(answer);
         if(answer1 != null)
@@ -25,7 +29,7 @@ public class AnswerController {
         return ResponseEntity.badRequest().body(null);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<AnswerRespDTO> updateAnswer(@PathVariable Integer id, @RequestBody AnswerReqDTO answer)
+    public ResponseEntity<AnswerRespDTO> updateAnswer(@PathVariable Integer id, @Valid @RequestBody AnswerReqDTO answer)
     {
         AnswerRespDTO answer1 = answerService.updateAnswer(answer,id);
         if(answer != null)

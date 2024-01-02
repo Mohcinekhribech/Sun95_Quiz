@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,9 +36,10 @@ public class MessageService implements MessageServiceInterface {
     }
     public MessageRespDTO createMessage(MessageReqDTO message)
     {
+        message.setTime(LocalTime.now());
         Message message1 = modelMapper.map(message,Message.class);
         Optional<Room> room = roomRepository.findById(message.getRoom_id());
-        Optional<User> sender = userRepository.findById(message.getSender().getId());
+        Optional<User> sender = userRepository.findById(message.getSender_id());
         if (room.isPresent() && sender.isPresent())
         {
             message1.setRoom(room.get());

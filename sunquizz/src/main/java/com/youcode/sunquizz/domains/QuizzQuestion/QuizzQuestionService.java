@@ -6,6 +6,7 @@ import com.youcode.sunquizz.domains.Quizz.Quizz;
 import com.youcode.sunquizz.domains.Quizz.QuizzRepository;
 import com.youcode.sunquizz.domains.QuizzQuestion.DTOs.QuizzQuestionReq;
 import com.youcode.sunquizz.domains.QuizzQuestion.DTOs.QuizzQuestionResp;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,27 +16,24 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class QuizzQuestionService {
     QuizzQuestionRepository quizzQuestionRepository;
-    @Autowired
     QuizzRepository quizzRepository;
-    @Autowired
     QuestionRepository questionRepository;
-    @Autowired
     ModelMapper modelMapper;
     Optional<Quizz> quizz;
     Optional<Question> question;
-    @Autowired
-    public QuizzQuestionService(QuizzQuestionRepository quizzQuestionRepository)
-    {
-        this.quizzQuestionRepository = quizzQuestionRepository;
-    }
+
+    // get all question in a quiz
     public List<QuizzQuestionResp> getQuestionsByQuizz(Integer id)
     {
         Quizz quizz = new Quizz();
         quizz.setId(id);
         return quizzQuestionRepository.findAllByQuizz(quizz).stream().map(quizzQuestion -> modelMapper.map(quizzQuestion,QuizzQuestionResp.class)).collect(Collectors.toList());
     }
+
+    // assign a question to a quiz
     public QuizzQuestionResp createQuizzQuestion(QuizzQuestionReq quizzQuestion)
     {
         QuizzQuestion quizzQuestionE = modelMapper.map(quizzQuestion,QuizzQuestion.class);
@@ -50,6 +48,8 @@ public class QuizzQuestionService {
         }
         return null;
     }
+
+    // update a question assigned to a quiz
     public QuizzQuestionResp updateQuizzQuestion(QuizzQuestionReq quizzQuestion,Integer id)
     {
         Optional<QuizzQuestion> questionE = quizzQuestionRepository.findById(id);
@@ -66,6 +66,8 @@ public class QuizzQuestionService {
             return null;
         }).orElse(null);
     }
+
+    // remove a question  assigned to a quiz
     public Integer deleteQuizzQuestion(Integer id)
     {
         Optional<QuizzQuestion> quizzQuestion = quizzQuestionRepository.findById(id);

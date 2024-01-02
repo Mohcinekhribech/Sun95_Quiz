@@ -5,17 +5,12 @@ import com.youcode.sunquizz.Security.User.User;
 import com.youcode.sunquizz.Security.User.UserRepository;
 import com.youcode.sunquizz.domains.chat.room.dtos.RoomReqDTO;
 import com.youcode.sunquizz.domains.chat.room.dtos.RoomRespDTO;
-import com.youcode.sunquizz.domains.chat.room.roomMembers.RoomMembers;
-import com.youcode.sunquizz.domains.chat.room.roomMembers.dtos.RoomMembersRespDTO;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
